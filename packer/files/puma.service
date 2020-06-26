@@ -1,0 +1,13 @@
+[Unit]
+Description=puma
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+WorkingDirectory=/home/ubuntu/reddit
+ExecStart=/usr/local/bin/puma
+KillMode=mixed
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

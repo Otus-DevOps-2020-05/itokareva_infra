@@ -10,4 +10,9 @@ testapp_port = 9292
 # install_ruby.sh install_mongodb.sh deploy.sh  
 # Дополнительное задание
 # create_ycvm.sh metadata.yaml http://84.201.159.22:9292/
- 
+
+# Домашняя работа 7
+# packer/ubuntu16.json - конфигурационный файл для создания образа ВМ с предустановленными ruby и mongodb
+# packer/immutable.json - 'bake' образ ВМ: все зависимости приложения и сам код приложения
+# packer/variables.json - переменные для обоих шаблонов (git ignore)
+# config-scripts/create-reddit-vm.sh - скрипт создания ВМ из образа (с предустановленными ruby и mongodb) 
