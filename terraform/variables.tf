@@ -26,3 +26,9 @@ variable subnet_id {
 variable service_account_key_file {
   description = "key .json"
 }
+variable account_id {
+  description = "service account id"
+}
+variable counter {
+  description = "instance array counter"
+}
