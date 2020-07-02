@@ -7,3 +7,6 @@ service_account_key_file = "path to key.json"
 private_key_path         = "path to public key"
 account_id               = "aaa222aaa222aaa222aa"
 counter                  = 3
+db_disk_image            = "lalalalalalalalalala"
+app_disk_image           = "tratatatratatatratat"
+
