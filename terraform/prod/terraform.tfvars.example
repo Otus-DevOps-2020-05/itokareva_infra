@@ -9,4 +9,5 @@ account_id               = "aaa222aaa222aaa222aa"
 counter                  = 3
 db_disk_image            = "lalalalalalalalalala"
 app_disk_image           = "tratatatratatatratat"
-
+puma_service             = "pumpumpumpumpumpumpu"
+deploy_script            = "depdepdepdepdepdepde"
