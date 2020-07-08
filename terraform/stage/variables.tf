@@ -40,4 +40,11 @@ variable db_disk_image {
   description = "Disk image for reddit app"
   default     = "reddit-db"
 }
-
+variable puma_service {
+  # Описание переменной
+  description = "Path to puma.service unit-file"
+}
+variable deploy_script {
+  # Описание переменной
+  description = "Path to deploy.sh"
+}
