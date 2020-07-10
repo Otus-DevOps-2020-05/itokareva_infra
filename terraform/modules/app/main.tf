@@ -24,6 +24,11 @@ resource "yandex_compute_instance" "app" {
   metadata = {
   ssh-keys = "ubuntu:${file(var.public_key_path)}"
   }
+}
+resource "null_resource" "deploy_reddit" {
+#  %{ if var.do_deploy == true ~}
+
+count = "${var.do_deploy == true ? 1 : 0}"
 
   connection {
     type  = "ssh"
@@ -49,5 +54,7 @@ resource "yandex_compute_instance" "app" {
     script = "../modules/app/deploy.sh"
 #    on_failure = continue
   }
+
+#%{ endif ~}
 
 }
