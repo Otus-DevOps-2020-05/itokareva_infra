@@ -48,3 +48,8 @@ variable deploy_script {
   # Описание переменной
   description = "Path to deploy.sh"
 }
+variable do_deploy {
+  # Описание переменной
+  description = "boolean do deploy or not"
+  default = true
+}

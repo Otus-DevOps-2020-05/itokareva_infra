@@ -12,6 +12,7 @@ module "app" {
   private_key_path = var.private_key_path
   puma_service     = var.puma_service
   deploy_script    = var.deploy_script
+  do_deploy       = var.do_deploy
 }
 
 module "db" {

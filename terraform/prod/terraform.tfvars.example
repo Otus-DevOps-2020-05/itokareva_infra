@@ -11,3 +11,4 @@ db_disk_image            = "lalalalalalalalalala"
 app_disk_image           = "tratatatratatatratat"
 puma_service             = "pumpumpumpumpumpumpu"
 deploy_script            = "depdepdepdepdepdepde"
+do_deploy                = true
