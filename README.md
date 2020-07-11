@@ -15,6 +15,7 @@ testapp_port = 9292
 # packer/ubuntu16.json - конфигурационный файл для создания образа ВМ с предустановленными ruby и mongodb
 # packer/immutable.json - 'bake' образ ВМ: все зависимости приложения и сам код приложения
 # packer/variables.json - переменные для обоих шаблонов (git ignore)
+
 # config-scripts/create-reddit-vm.sh - скрипт создания ВМ из образа (с предустановленными ruby и mongodb)
 
 # Домашняя работа 8
