@@ -146,3 +146,20 @@ ansible all -m ping
     "changed": false,
     "ping": "pong"
 }
+
+4) Вариант со статическим inventory
+ansible all -i 1.py -m ping
+84.201.175.228 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+130.193.37.30 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
