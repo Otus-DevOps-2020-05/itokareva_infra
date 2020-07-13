@@ -6,3 +6,6 @@ variables.json
 .terraform/
 *.tt
 stage_remote/
+1.py
+hosts.json
+inventory.tmpl

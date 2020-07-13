@@ -45,3 +45,88 @@ testapp_port = 9292
 # state - находится в object storage в yandex облаке.
 # backend.tf - конфигурация state.
 # sudo /usr/local/bin/terraform init -backend-config=backend.tf
+
+# Домашняя работа 10
+
+Знакомство с Ansible
+
+1) Установлен ansible 2.9.10, Python 2.7.17
+
+2) Тестируем playbook:
+
+a) репозиторий reddit был установлен на appserver, поэтому changed=0
+
+ansible-playbook clone.yml
+
+PLAY [Clone] ********************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] **********************************************************************************************************************************************************************
+ok: [appserver]
+
+TASK [Clone repo] ***************************************************************************************************************************************************************************
+ok: [appserver]
+
+PLAY RECAP **********************************************************************************************************************************************************************************
+appserver                  : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+ansible app -m shell -a 'ls -la ~/reddit warn=no'
+appserver | CHANGED | rc=0 >>
+total 56
+drwxrwxr-x 5 ubuntu ubuntu 4096 Jul 12 11:39 .
+drwxr-xr-x 6 ubuntu ubuntu 4096 Jul 12 11:39 ..
+-rw-rw-r-- 1 ubuntu ubuntu 4285 Jul 12 11:39 app.rb
+-rw-rw-r-- 1 ubuntu ubuntu  433 Jul 12 11:39 Capfile
+drwxrwxr-x 3 ubuntu ubuntu 4096 Jul 12 11:39 config
+-rw-rw-r-- 1 ubuntu ubuntu   41 Jul 12 11:39 config.ru
+-rw-rw-r-- 1 ubuntu ubuntu  337 Jul 12 11:39 Gemfile
+-rw-rw-r-- 1 ubuntu ubuntu 1256 Jul 12 11:39 Gemfile.lock
+drwxrwxr-x 8 ubuntu ubuntu 4096 Jul 12 11:40 .git
+-rw-rw-r-- 1 ubuntu ubuntu    5 Jul 12 11:39 .gitignore
+-rw-rw-r-- 1 ubuntu ubuntu  560 Jul 12 11:39 helpers.rb
+-rw-rw-r-- 1 ubuntu ubuntu  582 Jul 12 11:39 README.md
+drwxrwxr-x 2 ubuntu ubuntu 4096 Jul 12 11:39 views
+
+б) удалим репозиторий reddit на appserver и повторим запуск playbook
+
+ansible app -m command -a 'rm -rf ~/reddit warn=no'
+appserver | CHANGED | rc=0 >>
+
+ansible app -m shell -a 'ls -la ~/reddit warn=no'
+appserver | FAILED | rc=2 >>
+ls: cannot access '/home/ubuntu/reddit': No such file or directorynon-zero return code
+
+ansible-playbook clone.yml
+
+PLAY [Clone] ********************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] **********************************************************************************************************************************************************************
+ok: [appserver]
+
+TASK [Clone repo] ***************************************************************************************************************************************************************************
+changed: [appserver]
+
+PLAY RECAP **********************************************************************************************************************************************************************************
+appserver                  : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+После того, как каталог ~/reddit удалили => changed=1, потому что каталог скачали (т.е. произошло изменение)
+
+3) создан inventoty типа shell, который запускается "на лету" в bash скрипте, который запускает terraform output в "хитром формате",
+для чего был изменен файл terraform/prod/output.tf:
+
+### The Ansible inventory file
+output "inventory" {
+value = <<INVENTORY
+{ "_meta": {
+        "hostvars": { }
+    },
+  "app": {
+    "hosts": ["${module.app.external_ip_address_app}"]
+  },
+  "db": {
+    "hosts": ["${module.db.external_ip_address_db}"]
+  }
+}
+    INVENTORY
+}
+
+inventory.sh прописан в ansible.cfg, поэтому можно вызвать ansible без ключа -i.
