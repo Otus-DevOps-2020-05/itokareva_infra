@@ -130,3 +130,19 @@ value = <<INVENTORY
 }
 
 inventory.sh прописан в ansible.cfg, поэтому можно вызвать ansible без ключа -i.
+
+ansible all -m ping
+84.201.175.228 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+130.193.37.30 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
