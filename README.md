@@ -162,4 +162,66 @@ ansible all -i 1.py -m ping
     },
     "changed": false,
     "ping": "pong"
+
+# Домашняя работа 11
+
+Deploy и управление конфигурацией с Ansible.
+
+1) конфигурация db, app и deploy приложения: один playbook, один сценарий
+- reddit_app_one_play.yml
+2) конфигурация db, app и deploy приложения: один playbook, несколько сценариев
+- reddit_app_multiple_play.yml
+3) конфигурация db, app и deploy приложения: несколько плейбуков
+- созданы db.yml, app.yml, deploy.yml
+- создан главный плейбук site.yml, который включает в себя остальные
+4) Изменили провиженинг в parcker:
+- packer_db.yml - добавляет репозиторий MongoDB
+- packer_app.yml - устанавливает Ruby и Bundler
+Теперь эти плейбуки выболняют те же действия, что раньше выполняли провиженеры в packer/db.json, packer/app.json.
+Команды shell и command не использовались, только модули ansible.
+5) Заменены секции Provision в packer/db.json, packer/app.json.
+6) Созданы новые db и app образы.
+7) Из новых образов созданы ВМ с поднятыми на них bd и app.
+8) На новые ВМ применена конфигурация site.yml c использованием динамического inventory.
+Backend - работает, в БД сообщения сохраняет.
+
+Задание со (*)
+
+Динамический инвентори подробно описан в ДР №10, но чтобы работал шаблон без ручной вставки внутреннего
+ip-адреса, статическое значение переменной было заменено на динамическую ее подстановку из terraform output.
+Для этого было выполнено следующее:
+
+1)добавдена новая переменная private_ip в terraform/modules/db/outputs.tf
+2) изменен шаблон terraform/prod/outputs.tf на следующий:
+
+#output "external_ip_address_app" {
+#  value = module.app.external_ip_address_app
+#}
+#output "external_ip_address_db" {
+#  value = module.db.external_ip_address_db
+#}
+### The Ansible inventory file
+output "inventory" {
+value = <<INVENTORY
+{ "_meta": {
+        "hostvars": { }
+    },
+  "app": {
+    "hosts": ["${module.app.external_ip_address_app}"]
+  },
+  "db": {
+    "hosts": ["${module.db.external_ip_address_db}"],
+    "vars": {
+        "private_ip": "${module.db.private_ip_address_db}"
+    }
+  }
 }
+    INVENTORY
+}
+
+3) в шаблон templates/db_config.j2 добавлен вызов переменной из inventory:
+
+DATABASE_URL={{ hostvars[groups['db'][0]]['private_ip'] }}
+
+4) команда ansible для накатки конфигурации выглядит так:
+ansible-playbook -i inventory.sh site.yml

@@ -14,7 +14,10 @@ value = <<INVENTORY
     "hosts": ["${module.app.external_ip_address_app}"]
   },
   "db": {
-    "hosts": ["${module.db.external_ip_address_db}"]
+    "hosts": ["${module.db.external_ip_address_db}"],
+    "vars": {
+        "private_ip": "${module.db.private_ip_address_db}"
+    }
   }
 }
     INVENTORY

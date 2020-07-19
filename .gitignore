@@ -7,3 +7,5 @@ variables.json
 *.tt
 stage_remote/
 inventory.tmpl
+*.retry
+packer_db_main.yml
