@@ -2,6 +2,12 @@ dist: trusty
 sudo: required
 language: bash
 before_install:
+#- if: (type = push AND branch IN (master)) OR (type = pull_request)
+- packer validate -var-file packer/variables.json packer/db.json
+- packer validate -var-file packer/variables.json packer/app.json
+- cd terraform/prod  && /usr/local/bin/terraform validate
+#- cd terraform/stage && /usr/local/bin/terraform validate
+- /usr/local/bin/terraform validate terraform/prod
 - curl https://raw.githubusercontent.com/express42/otus-homeworks/2020-05/run.sh |
   bash
 notifications:
