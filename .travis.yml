@@ -3,6 +3,7 @@ sudo: required
 language: bash
 before_install:
 #- if: (type = push AND branch IN (master)) OR (type = pull_request)
+- pwd
 - packer validate -var-file packer/variables.json packer/db.json
 - packer validate -var-file packer/variables.json packer/app.json
 - cd terraform/prod  && /usr/local/bin/terraform validate
