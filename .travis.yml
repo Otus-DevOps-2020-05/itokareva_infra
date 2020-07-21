@@ -5,7 +5,7 @@ before_install:
 #- if: (type = push AND branch IN (master)) OR (type = pull_request)
 #- packer validate -var-file packer/variables.json.example packer/db.json
 #- packer validate -var-file packer/variables.json.example packer/app.json
-- cd terraform/prod  && /usr/local/bin/terraform validate
+- cd terraform/prod  && terraform validate -var-file=terraform.tfvars.example
 #- cd terraform/stage && /usr/local/bin/terraform validate
 - curl https://raw.githubusercontent.com/express42/otus-homeworks/2020-05/run.sh |
   bash
