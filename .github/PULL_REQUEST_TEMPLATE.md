@@ -1,4 +1,5 @@
 # Выполнено ДЗ №
+[![Build Status](https://travis-ci.com/Otus-DevOps-2020-05/itokareva_infra.svg?branch=master)](https://travis-ci.com/Otus-DevOps-2020-05/it`okareva_infra)
 
  - [ ] Основное ДЗ
  - [ ] Задание со *

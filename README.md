@@ -225,3 +225,34 @@ DATABASE_URL={{ hostvars[groups['db'][0]]['private_ip'] }}
 
 4) команда ansible для накатки конфигурации выглядит так:
 ansible-playbook -i inventory.sh site.yml
+
+# Домашняя работа 12
+
+Ansible: работа с ролми и окружениями
+
+1) создана роль базы данных ansible/roles/db
+2) создана роль приложения ansible/roles/app
+3) удалеы вызовы тасков и хендлеров из ansible/app.yml, добавлен вызов роли app
+4) удалеы вызовы тасков и хендлеров из ansible/db.yml, добавлен вызов роли db
+5) приложение с вызовом ролей работает правильно
+6) созданы окружения stge и prod: ansible/environments/stage, ansible/environments/prod
+7) в папки  environments перенесены описания переменных stage/group_vars/app, stage/group_vars/db
+8) удалены описания переменных из самого плейбука
+9) приложение с настроенными окружениями работает правильно
+10) добавлен вызов роли jdauphant.nginx из Community в плейбук app.yml
+11) добавлен  вызов роли jdauphant.nginx в плейбук app.yml
+12) приложение теперь работает на 80 порту
+13) добавлен  плейбук для создания пользователей - файл ansible/playbooks/users.yml
+14) создан файл ключа ~/.ansible/vault.key
+15) создан файл с данными пользователей для каждого окружения:
+    -  ansible/environments/stage/credentials.yml
+    -  ansible/environments/prod/credentials.yml
+16) зашифрованы credentials.yml  файлы используя vault.key
+17) после вызова плейбука site.yml пользователе созданы на серверах db, app и к ним можно подключиться по ssh
+
+Задание со (*)
+
+Скрипты для динамического inventory: inventory.sh  добавлены в ansible/environments/stage, ansible/environments/prod.
+В ansible.cfg добавлено:
+[defaults]
+inventory = ./environments/stage/inventory.sh
