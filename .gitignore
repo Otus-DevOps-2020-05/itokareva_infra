@@ -10,3 +10,4 @@ inventory.tmpl
 *.retry
 packer_db_main.yml
 jdauphant.nginx
+packer_db_main.yml
