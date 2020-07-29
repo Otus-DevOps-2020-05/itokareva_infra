@@ -22,8 +22,8 @@
   tags: install
 - name: Install mongodb
   become: true
-  apt: 
-    name: mongodb-org 
+  apt:
+    name: mongodb-org
     state: present
   tags: install
 - name: Configure service supervisor
