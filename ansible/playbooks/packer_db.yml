@@ -4,28 +4,5 @@
   vars:
     mongo_bind_ip: 0.0.0.0
   become: true
-  tasks:
-  # Добавим ключ репозитория для последующей работы с ним
-  - name: Add APT key
-    apt_key:
-      url: https://www.mongodb.org/static/pgp/server-4.2.asc
-      state: present
-  - name: Downloads files from https
-    get_url:
-      url: http://www.mongodb.org/static/pgp/server-4.2.asc
-      dest: /etc/apt/sources.list.d/
-      mode: '0440'
-  - name: Add specified repository into sources list using specified filename
-    apt_repository:
-      repo: deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.2 multiverse
-      state: present
-      filename: /etc/apt/sources.list.d/mongodb-org-4.2.list
-  - name: Update and upgrade apt packages
-    become: true
-    apt: upgrade=yes update_cache=yes
-  - name: Install mongodb
-    become: true
-    apt: name=mongodb-org state=present
-  handlers:
-  - name: restart mongod
-    service: name=mongod state=started enabled=yes
+  roles:
+    - db

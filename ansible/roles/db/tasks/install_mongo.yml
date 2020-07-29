@@ -1,0 +1,34 @@
+# Добавим ключ репозитория для последующей работы с ним
+- name: Add APT key
+  apt_key:
+    url: https://www.mongodb.org/static/pgp/server-4.2.asc
+    state: present
+  tags: install
+- name: Downloads files from https
+  get_url:
+    url: http://www.mongodb.org/static/pgp/server-4.2.asc
+    dest: /etc/apt/sources.list.d/
+    mode: '0440'
+  tags: install
+- name: Add specified repository into sources list using specified filename
+  apt_repository:
+    repo: deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.2 multiverse
+    state: present
+    filename: /etc/apt/sources.list.d/mongodb-org-4.2.list
+  tags: install
+- name: Update and upgrade apt packages
+  become: true
+  apt: upgrade=yes update_cache=yes
+  tags: install
+- name: Install mongodb
+  become: true
+  apt: 
+    name: mongodb-org 
+    state: present
+  tags: install
+- name: Configure service supervisor
+  systemd:
+    name: mongod
+    enabled: yes
+    state: started
+  tags: install
