@@ -3,9 +3,6 @@
     - name: Show info about the env this host belong to
       debug:
         msg: "This host is in {{ env }} environment!!!"
-    - name: Change mongo config file
-      template:
-        src: mongod.conf.j2
-        dest: /etc/mongod.conf
-        mode: 0664
-      notify: restart mongod
+
+    - include: install_mongo.yml
+    - include: config_mongo.yml

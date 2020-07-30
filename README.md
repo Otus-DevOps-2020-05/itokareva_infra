@@ -256,3 +256,65 @@ Ansible: работа с ролми и окружениями
 В ansible.cfg добавлено:
 [defaults]
 inventory = ./environments/stage/inventory.sh
+
+# Домашняя работа 13
+
+Разработка и тестирование Ansible ролей и плейбуков
+
+1) Установлен Vagrant и VirtualBox на локальной машине(linux). 
+Попытка использовать Nested virtualisation внутри ВМ поднятой в VirtualBox не была успешной. Процесс установки сваливался по timeout и сама ВМ падала.
+Но на ВМ созданной внутри Hyper-v машины создались нормально.
+Остановилась на машине c "голым" linux (не ВМ)
+2) Доработаны роли Ansible и выполнен провижининг.
+3) Приложение установлено иработает на порту 9292
+4) создано и активировано виртуальное окружение: source venv/bin/activate  
+5) Установлены фреймворк для тестирования Ansible-кода TestInfra и инструмент тетирования molecule. 
+6) Создан тест в roles/db/molecule/default/tests/test_default.py:
+
+def test_socket_listening(host):
+  socket = host.socket('tcp://0.0.0.0:27017')
+  assert socket.is_listening
+   
+Изменен verifier в файле roles/db/molecule/default/molecule.yml (по умолчанию Ansible):
+ 
+verifier:
+  name: testinfra
+в файле roles/db/molecule/default/molecule.yml (по умолчанию Ansible)
+7) Пройден весь цикл тестирования для роли db.
+molecule create
+molecule converge
+molecule verify -- запускает тест test_default.py
+
+(venv) [itokareva@otus db]$ molecule verify
+--> Test matrix
+
+└── default
+    └── verify
+
+--> Scenario: 'default'
+--> Action: 'verify'
+--> Executing Testinfra tests found in /Otus_12/itokareva_infra/ansible/roles/db/molecule/default/tests/...
+    ============================= test session starts ==============================
+    platform linux -- Python 3.6.8, pytest-5.4.3, py-1.9.0, pluggy-0.13.1
+    rootdir: /Otus_12/itokareva_infra/ansible/roles/db/molecule/default
+    plugins: testinfra-5.2.2
+collected 1 item
+
+    tests/test_default.py .                                                  [100%]
+
+    ============================== 1 passed in 2.01s ===============================
+Verifier completed successfully.
+
+8) Переписаны плейбуки packer_db.yml, packer_app.yml с использованием ролей db,app. Приложение сохранило свою работоспособность
+
+
+Задание со (*)
+
+Для настройки проксирования добавлет параметр в ansible.extra_vars в Vagrantfile:
+
+        "nginx_sites" => {
+          "default" => [
+            "listen 80",
+            "server_name 'reddit'",
+            "location / { proxy_pass http://127.0.0.1:9292; }"
+
